@@ -123,6 +123,13 @@ body{padding:16px;}
   .nw-psec + .nw-psec { margin-top: 0; padding-top: 0; border-top: 0; padding-left: var(--cds-gap-xl); border-left: 1px dashed var(--color-border-line); }
   .nw-item .nw-h, .nw-card > .nw-h { font-size: var(--nw-fs-heading); line-height: 1.4; }
 }
+
+.nw-arch { display: flex; align-items: center; gap: var(--cds-gap-sm); flex-wrap: wrap; }
+.nw-arch-btn { font: inherit; font-size: var(--nw-fs-caption); color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: 999px; width: 1.9rem; height: 1.9rem; cursor: pointer; line-height: 1; padding: 0; }
+.nw-arch-btn:disabled { opacity: .35; cursor: default; }
+.nw-arch-btn:not(:disabled):hover { border-color: var(--color-fg-muted); }
+.nw-arch-sel { font: inherit; font-size: var(--nw-fs-caption); color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+.nw-archived { flex-basis: 100%; margin: 0; font-size: var(--nw-fs-caption); color: var(--color-warn); }
 </style>
 </head>
 <body>
@@ -132,7 +139,12 @@ body{padding:16px;}
 <div class="nw">
   <header class="nw-head">
     <h1 class="nw-title" id="top">World Economy News: Top 5</h1>
-    <p class="nw-sub"><b data-draw="edition" data-source="news" data-field="edition">—</b></p>
+    <div class="nw-arch">
+      <button type="button" class="nw-arch-btn" id="nw-prev" aria-label="Previous day">◀</button>
+      <p class="nw-sub"><b data-draw="edition" data-source="news" data-field="edition">—</b></p>
+      <button type="button" class="nw-arch-btn" id="nw-next" aria-label="Next day">▶</button>
+      <select id="nw-dates" class="nw-arch-sel" aria-label="Choose a date"></select>
+    </div>
     <p class="nw-key"><span class="nw-kind">N</span> News &nbsp;·&nbsp; <span class="nw-kind nw-kind-c">C</span> Commentary, column, editorial or analysis (opinion)</p>
   </header>
 
@@ -172,10 +184,62 @@ body{padding:16px;}
     });
   }
   function runAll(){ Object.keys(draws).forEach(run); }
-  fetch('data/latest.json', { cache: 'no-store' })
+  var dates = [], current = null;
+  var sel = document.getElementById('nw-dates');
+  var prev = document.getElementById('nw-prev');
+  var next = document.getElementById('nw-next');
+  var label = function(d){
+    var t = new Date(d + 'T00:00:00+09:00');
+    return isNaN(t) ? d : new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Seoul', year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' }).format(t);
+  };
+  function syncNav(){
+    var i = dates.indexOf(current);
+    prev.disabled = i < 0 || i >= dates.length - 1;   // dates are newest first
+    next.disabled = i <= 0;
+    if (sel.value !== current) sel.value = current || '';
+    var note = document.getElementById('nw-archived');
+    if (i > 0) {
+      if (!note) { note = document.createElement('p'); note.id = 'nw-archived'; note.className = 'nw-archived'; document.querySelector('.nw-head').appendChild(note); }
+      note.textContent = 'You are viewing a past edition. ';
+      var back = document.createElement('a'); back.href = '#'; back.textContent = 'Back to today';
+      back.onclick = function(e){ e.preventDefault(); go(dates[0]); };
+      note.appendChild(back);
+    } else if (note) { note.remove(); }
+  }
+  function load(file){
+    state = { status: 'loading', data: [] }; runAll();
+    return fetch(file, { cache: 'no-store' })
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(j){ state = { status: 'ok', data: j.rows || [] }; runAll(); })
+      .catch(function(){ state = { status: 'error', data: [] }; runAll(); });
+  }
+  function go(d, replace){
+    if (!d) return;
+    current = d;
+    var h = '#' + d;
+    if (location.hash !== h) { replace ? history.replaceState(null, '', h) : history.pushState(null, '', h); }
+    syncNav();
+    window.scrollTo(0, 0);
+    return load('data/' + d + '.json');
+  }
+  prev.onclick = function(){ var i = dates.indexOf(current); if (i < dates.length - 1) go(dates[i + 1]); };
+  next.onclick = function(){ var i = dates.indexOf(current); if (i > 0) go(dates[i - 1]); };
+  sel.onchange = function(){ go(sel.value); };
+  window.addEventListener('popstate', function(){ var d = location.hash.slice(1); if (dates.indexOf(d) >= 0 && d !== current) { current = d; syncNav(); load('data/' + d + '.json'); } });
+
+  fetch('data/index.json', { cache: 'no-store' })
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
-    .then(function(j){ state = { status: 'ok', data: j.rows || [] }; runAll(); })
-    .catch(function(){ state = { status: 'error', data: [] }; runAll(); });
+    .then(function(j){
+      dates = (j.dates || []).slice().sort().reverse();
+      sel.replaceChildren.apply(sel, dates.map(function(d, k){ return new Option(label(d) + (k === 0 ? ' (latest)' : ''), d); }));
+      var want = location.hash.slice(1);
+      go(dates.indexOf(want) >= 0 ? want : dates[0], true);
+    })
+    .catch(function(){
+      // No date list: fall back to today's file and hide the navigator.
+      document.querySelector('.nw-arch').querySelectorAll('button, select').forEach(function(n){ n.hidden = true; });
+      load('data/latest.json');
+    });
 })();
 </script>
 <script>
