@@ -130,6 +130,7 @@ body{padding:16px;}
 .nw-arch-btn:not(:disabled):hover { border-color: var(--color-fg-muted); }
 .nw-arch-sel { font: inherit; font-size: var(--nw-fs-caption); color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
 .nw-archived { flex-basis: 100%; margin: 0; font-size: var(--nw-fs-caption); color: var(--color-warn); }
+.nw-outlook { margin-top: var(--cds-gap-sm); }
 </style>
 </head>
 <body>
@@ -159,7 +160,7 @@ body{padding:16px;}
       <li>For paywalled stories, we use reliable wire services or business papers that explicitly cite the original, or authorized republications, and list the original source and the provider separately.</li>
       <li>Same-day stories (Korea time) come first; major stories from the past seven days are also allowed.</li>
       <li>Headlines are shown in English; a headline translated from another language is marked “Translated”.</li>
-      <li>“Fact” is what the news article reports; “Outlook” is a forecast or analysis in it. Editorials, columns and commentary are opinion and are labelled as such.</li>
+      <li>The news summary covers what the article reports; “Outlook” is a forecast or analysis in it. Editorials, columns and commentary are opinion and are labelled as such.</li>
       <li>★ marks a paywalled link; links to free republications carry no star.</li>
       <li>Excluded: simple stock-price moves, stock picks, promotional pieces, and repeat coverage of the same event.</li>
     </ul>
@@ -333,9 +334,8 @@ dash.draw('cards', (el) => {
     const meta = [r.original_source && ('Source: ' + r.original_source), r.provider && ('Via: ' + r.provider), r.pub_date && fmtDate(r.pub_date)].filter(Boolean).join(' · ');
     ns.append(mk('p', 'nw-meta', meta));
     if (r.summary) { const sm = mk('p', 'nw-sum', r.summary); sm.lang = 'en'; ns.append(sm); }
+    if (r.outlook) { const o = mk('p', 'nw-sec nw-outlook'); o.append(mk('span', 'nw-lab', 'Outlook'), document.createTextNode(r.outlook)); ns.append(o); }
     ns.append(whyEl(r.why, r.why_en));
-    const f = mk('p', 'nw-sec'); f.append(mk('span', 'nw-lab', 'Fact'), document.createTextNode(r.fact || '')); ns.append(f);
-    if (r.outlook) { const o = mk('p', 'nw-sec'); o.append(mk('span', 'nw-lab', 'Outlook'), document.createTextNode(r.outlook)); ns.append(o); }
     if (r.term) { const t = mk('p', 'nw-term'); t.append(mk('b', null, r.term), document.createTextNode(' — ' + (r.term_def || ''))); ns.append(t); }
     if (r.note) ns.append(mk('p', 'nw-note', 'Verification note · ' + r.note));
     panel.append(ns);
