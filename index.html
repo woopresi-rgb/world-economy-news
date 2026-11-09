@@ -132,16 +132,11 @@ body{padding:16px;}
 .nw-archived { flex-basis: 100%; margin: 0; font-size: var(--nw-fs-caption); color: var(--color-warn); }
 .nw-outlook { margin-top: var(--cds-gap-sm); }
 
-.nw-readbtn { font: inherit; font-size: var(--nw-fs-caption); font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); background: none; border-color: var(--color-border-line); cursor: pointer; line-height: inherit; }
+.nw-readbtn { font: inherit; font-size: 0.6rem; line-height: 1.2; color: var(--color-fg-muted); background: none; border: 1px solid var(--color-border-line); border-radius: 999px; padding: 0 5px; margin-bottom: 3px; cursor: pointer; white-space: nowrap; }
 .nw-readbtn:hover { color: var(--color-fg); border-color: var(--color-fg-muted); }
-.nw-readbtn.done { color: var(--color-ok); border-color: var(--color-ok); cursor: default; box-shadow: 0 0 0 2px var(--color-panel), 0 0 0 3px var(--color-ok); }
+.nw-readbtn.done { color: var(--color-ok); border-color: var(--color-ok); cursor: default; }
 
-.nw-talkbtn { border-color: var(--color-border-line); }
-@media (max-width: 480px) { .nw-talk-lbl { display: none; } .nw-top { gap: 6px; } }
-.nw-talk { grid-column: 1 / -1; margin-top: var(--cds-gap-md); padding-top: var(--cds-gap-sm); border-top: 1px dashed var(--color-border-line); }
-.nw-talk-intro { margin: 0 0 var(--cds-gap-sm); font-size: var(--nw-fs-caption); color: var(--color-fg-muted); line-height: 1.55; }
-.nw-talk-soon { margin: 0; font-size: var(--nw-fs-caption); color: var(--color-warn); }
-@media (min-width: 1024px) { .nw-card > .nw-talk { grid-column: 2 / span 2; } }
+.nw-numcol { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
 </style>
 </head>
 <body>
@@ -183,8 +178,7 @@ body{padding:16px;}
 <script>
 // ===== Settings (filled in after sign-up) =====
 window.NW_CFG = {
-  goatcounter: '',   // GoatCounter code, e.g. 'jj-econ'  -> stats at https://jj-econ.goatcounter.com
-  cusdisAppId: ''    // Cusdis App ID for the Talk tab (comments)
+  goatcounter: ''    // GoatCounter code, e.g. 'jj-econ'  -> stats at https://jj-econ.goatcounter.com
 };
 // ===== Visit / read tracking =====
 (function(){
@@ -203,34 +197,6 @@ window.NW_CFG = {
     document.head.appendChild(s);
   }
 })();
-</script>
-<script>
-window.CUSDIS_PREVENT_INITIAL_RENDER = true;
-window.nwTalk = function(box, r){
-  var id = window.NW_CFG.cusdisAppId;
-  box.replaceChildren();
-  var intro = document.createElement('p'); intro.className = 'nw-talk-intro';
-  intro.textContent = 'Questions or thoughts about today\'s ' + r.region + ' stories? Leave a comment — replies appear here after review. · 궁금한 점이나 생각을 남겨 주세요. 확인 후 답글이 달립니다.';
-  box.append(intro);
-  if (!id) { var p = document.createElement('p'); p.className = 'nw-talk-soon'; p.textContent = 'Comments are being set up. · 댓글 기능 준비 중입니다.'; box.append(p); return; }
-  var mount = document.createElement('div');
-  mount.dataset.host = 'https://cusdis.com';
-  mount.dataset.appId = id;
-  mount.dataset.pageId = r.edition + '-' + r.region_key;
-  mount.dataset.pageUrl = location.origin + location.pathname + '#' + r.edition;
-  mount.dataset.pageTitle = r.edition + ' · ' + r.region;
-  mount.dataset.theme = 'auto';
-  box.append(mount);
-  var go = function(){ try { window.CUSDIS.renderTo(mount); } catch (e) {} };
-  if (window.CUSDIS && window.CUSDIS.renderTo) return go();
-  (window.__nwCusdisWait = window.__nwCusdisWait || []).push(go);
-  if (!window.__nwCusdisLoading) {
-    window.__nwCusdisLoading = true;
-    var s = document.createElement('script'); s.async = true; s.src = 'https://cusdis.com/js/cusdis.es.js';
-    s.onload = function(){ (window.__nwCusdisWait || []).forEach(function(f){ f(); }); window.__nwCusdisWait = []; };
-    document.head.appendChild(s);
-  }
-};
 </script>
 <script>
 // Minimal stand-in for the dashboard runtime: loads data.json and runs the page's draw functions.
@@ -365,7 +331,9 @@ dash.draw('cards', (el) => {
     const color = dash.colors[ACCENT[r.region_key] ?? 0];
     const li = mk('li', 'nw-card'); li.style.setProperty('--nw-accent', color);
     const top = mk('div', 'nw-top');
-    top.append(mk('span', 'nw-num', String(r.order).padStart(2, '0')));
+    const numcol = mk('span', 'nw-numcol');
+    numcol.append(mk('span', 'nw-num', String(r.order).padStart(2, '0')));
+    top.append(numcol);
     const tag = mk('button', 'nw-tag nw-region-home', r.region); tag.type = 'button'; tag.style.color = color; tag.title = 'Back to headlines';
     top.append(tag);
     li.append(top);
@@ -394,7 +362,7 @@ dash.draw('cards', (el) => {
     // Read button
     const rkey = 'nw-read-' + r.edition + '-' + r.region_key;
     let wasRead = false; try { wasRead = localStorage.getItem(rkey) === '1'; } catch (e) {}
-    const rb = mk('button', 'nw-tag nw-readbtn' + (wasRead ? ' done' : ''), wasRead ? '✓ 읽음' : '읽음');
+    const rb = mk('button', 'nw-readbtn' + (wasRead ? ' done' : ''), wasRead ? '✓ 읽음' : '읽음');
     rb.type = 'button'; rb.setAttribute('aria-pressed', String(wasRead)); rb.title = wasRead ? 'Marked as read' : 'Tap after reading';
     rb.onclick = () => {
       if (rb.classList.contains('done')) return;
@@ -402,24 +370,11 @@ dash.draw('cards', (el) => {
       try { localStorage.setItem(rkey, '1'); } catch (e) {}
       window.nwTrack('read/' + r.edition + '/' + r.region_key, 'Read ' + r.edition + ' ' + r.region, true);
     };
-    top.append(rb);
-    // Talk tab (comments)
-    const tid = 'nw-talk-' + r.order;
-    const talk = mk('div', 'nw-talk'); talk.id = tid; talk.hidden = true;
-    const tb = mk('button', 'nw-tag nw-toggle nw-talkbtn'); tb.type = 'button'; tb.setAttribute('aria-label', 'Talk'); tb.append(mk('span', 'nw-talk-lbl', 'Talk '), document.createTextNode('💬'));
-    tb.setAttribute('aria-expanded', 'false'); tb.setAttribute('aria-controls', tid);
-    tb.onclick = () => {
-      const open = talk.hidden;
-      talk.hidden = !open; tb.setAttribute('aria-expanded', String(open));
-      if (open && !talk.dataset.ready) { talk.dataset.ready = '1'; window.nwTalk(talk, r); }
-      if (open) window.nwTrack('talk/' + r.edition + '/' + r.region_key, 'Opened talk ' + r.edition + ' ' + r.region, true);
-    };
-    top.append(tb);
+    numcol.prepend(rb);
 
     tag.onclick = () => {
       tag.classList.add('tapped'); clearTimeout(tag._t); tag._t = setTimeout(() => tag.classList.remove('tapped'), 700);
       if (!panel.hidden) btn.click();
-      if (typeof talk !== 'undefined' && !talk.hidden) tb.click();
     };
 
     // News
@@ -445,7 +400,6 @@ dash.draw('cards', (el) => {
       panel.append(cs);
     }
     li.append(panel);
-    li.append(talk);
     el.append(li);
   }
 });
