@@ -313,13 +313,13 @@ dash.draw('cards', (el) => {
     const panel = mk('div', 'nw-panel'); panel.id = pid;
     const isOpen = OPEN.has(key);
     panel.hidden = !isOpen;
-    const btn = mk('button', 'nw-tag nw-toggle', isOpen ? 'Fact & Outlook ▴' : 'Fact & Outlook ▾');
+    const btn = mk('button', 'nw-tag nw-toggle', isOpen ? 'Summary & Outlook ▴' : 'Summary & Outlook ▾');
     btn.type = 'button'; btn.setAttribute('aria-expanded', String(isOpen)); btn.setAttribute('aria-controls', pid);
     btn.onclick = () => {
       const open = panel.hidden;
       panel.hidden = !open;
       btn.setAttribute('aria-expanded', String(open));
-      btn.textContent = open ? 'Fact & Outlook ▴' : 'Fact & Outlook ▾';
+      btn.textContent = open ? 'Summary & Outlook ▴' : 'Summary & Outlook ▾';
       open ? OPEN.add(key) : OPEN.delete(key);
     };
     top.append(btn);
