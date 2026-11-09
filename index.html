@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Economy News: Top 5</title>
+<meta name="description" content="Daily world economy news and commentary for high school students.">
+<style>
+:root{
+  --font-anthropic-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", Roboto, Helvetica, Arial, sans-serif;
+  --font-anthropic-serif: Georgia, "Times New Roman", "Noto Serif KR", serif;
+  --cds-font-size-caption: .8125rem; --cds-font-size-body: 1rem; --cds-font-size-heading: 1.125rem; --cds-font-size-title: 1.75rem;
+  --cds-font-weight-medium: 600;
+  --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 12px; --cds-gap-lg: 16px; --cds-gap-xl: 24px;
+  --cds-pad-xs: 4px; --cds-pad-sm: 8px; --cds-pad-md: 12px; --cds-pad-lg: 16px; --cds-pad-xl: 24px;
+  --cds-radius: 8px; --cds-dur-slow: .25s; --cds-ease-out: cubic-bezier(.2,.7,.2,1);
+  --color-fg: #1f1e1d; --color-fg-muted: #6b6a68; --color-bg: #faf9f5; --color-panel: #ffffff; --color-border-line: #e3e1db;
+  --color-ok: #2f8a4d; --color-warn: #b8650f; --color-bad: #c0392b;
+  --cds-surface-popover: #ffffff; --cds-border: #d9d6cf; --cds-shadow-popover: 0 4px 16px rgba(0,0,0,.12);
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark){ :root{
+  --color-fg: #f0eee8; --color-fg-muted: #a8a59e; --color-bg: #1c1b19; --color-panel: #262523; --color-border-line: #3a3936;
+  --color-ok: #5cc184; --color-warn: #e59a4a; --color-bad: #e6675a;
+  --cds-surface-popover: #2c2b29; --cds-border: #45433f; --cds-shadow-popover: 0 4px 16px rgba(0,0,0,.5);
+}}
+html,body{margin:0;background:var(--color-bg);color:var(--color-fg);}
+body{padding:16px;}
+@media (min-width:760px){ body{padding:24px 32px;} }
+.dash-skeleton{min-height:12rem;}
+
+
+#dash-root { --dash-gutter: var(--cds-pad-md); }
+.nw { --nw-fs-caption: calc(var(--cds-font-size-caption) * .8); --nw-fs-body: calc(var(--cds-font-size-body) * .8); --nw-fs-heading: calc(var(--cds-font-size-heading) * .8); --nw-fs-title: calc(var(--cds-font-size-title) * .8); font-size: var(--nw-fs-body); max-width: 60rem; margin-inline: auto; font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.nw-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); padding-block: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); margin-bottom: var(--cds-pad-sm); }
+.nw-kicker { font-size: var(--nw-fs-caption); color: var(--color-fg-muted); letter-spacing: .04em; margin: 0 0 var(--cds-gap-xs); }
+.nw-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--nw-fs-title); margin: 0; line-height: 1.2; }
+.nw-sub { margin: 0; color: var(--color-fg-muted); font-size: var(--nw-fs-body); }
+.nw-sub b { font-variant-numeric: tabular-nums; color: var(--color-fg); }
+.nw-notice { margin-top: var(--cds-gap-md); color: var(--color-fg-muted); font-size: var(--nw-fs-caption); line-height: 1.55; }
+.nw-list { display: grid; gap: var(--cds-gap-xs); list-style: none; margin: 0; padding: 0; min-height: 12rem; align-items: start; }
+@media (min-width: 760px) { .nw-list { grid-template-columns: 1fr 1fr; } }
+.nw-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-md); }
+.nw-top { display: flex; align-items: flex-end; gap: var(--cds-gap-sm); flex-wrap: wrap; margin-bottom: var(--cds-gap-sm); }
+.nw-num { font-family: var(--font-anthropic-serif); font-size: var(--nw-fs-heading); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.nw-tag { font-size: var(--nw-fs-caption); font-weight: var(--cds-font-weight-medium); padding: 2px var(--cds-pad-sm); border-radius: 999px; border: 1px solid currentColor; }
+.nw-h { font-size: var(--nw-fs-heading); font-weight: var(--cds-font-weight-medium); line-height: 1.35; margin: 0 0 var(--cds-gap-xs); }
+.nw-tr { font-size: var(--nw-fs-caption); color: var(--color-fg-muted); margin-left: var(--cds-gap-xs); font-weight: 400; }
+.nw-meta { font-size: var(--nw-fs-caption); color: var(--color-fg-muted); margin: 0 0 var(--cds-gap-md); font-variant-numeric: tabular-nums; }
+.nw-sec { margin: 0 0 var(--cds-gap-sm); font-size: var(--nw-fs-body); line-height: 1.65; }
+.nw-lab { display: inline-block; min-width: 2.6em; font-size: var(--nw-fs-caption); font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); margin-right: var(--cds-gap-xs); }
+.nw-why { margin: var(--cds-gap-md) 0 var(--cds-gap-sm); padding: var(--cds-pad-sm) var(--cds-pad-md); border-left: 3px solid var(--nw-accent, var(--color-fg)); background: var(--color-bg); border-radius: 0 var(--cds-radius) var(--cds-radius) 0; line-height: 1.6; }
+.nw-term { font-size: var(--nw-fs-caption); color: var(--color-fg-muted); margin: 0 0 var(--cds-gap-md); line-height: 1.55; }
+.nw-term b { color: var(--color-fg); }
+.nw-lab-why { display: block; margin-bottom: var(--cds-gap-xs); }
+.nw-why-ko, .nw-why-en { margin: 0; }
+.nw-why-ko { margin-top: var(--cds-gap-xs); color: var(--color-fg-muted); }
+.nw-note { font-size: var(--nw-fs-caption); color: var(--color-fg-muted); margin: 0 0 var(--cds-gap-md); font-style: italic; line-height: 1.55; }
+.nw-card .nw-h { margin-bottom: 0; }
+.nw-card .nw-top { margin-bottom: var(--cds-gap-xs); }
+.nw-toggle { font: inherit; font-size: var(--nw-fs-caption); font-weight: var(--cds-font-weight-medium); color: var(--color-fg); background: none; border-color: var(--color-ok); cursor: pointer; white-space: nowrap; line-height: inherit; }
+.nw-toggle:hover { background: color-mix(in srgb, var(--color-ok) 10%, transparent); }
+.nw-toggle[aria-expanded="true"] { background: color-mix(in srgb, var(--color-ok) 16%, transparent); }
+.nw-toggle[aria-expanded="true"] { box-shadow: 0 0 0 2px var(--color-panel), 0 0 0 3px var(--color-ok); }
+.nw-region[aria-expanded="true"] { box-shadow: 0 0 0 2px var(--color-panel), 0 0 0 3px currentColor; }
+.nw-toggle:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.nw-panel { margin-top: var(--cds-gap-sm); padding-top: var(--cds-gap-sm); border-top: 1px solid var(--color-border-line); }
+@media (prefers-reduced-motion: no-preference) { .nw-panel:not([hidden]) { animation: nw-open var(--cds-dur-slow) var(--cds-ease-out); } }
+@keyframes nw-open { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.nw-region { font: inherit; font-size: var(--nw-fs-caption); font-weight: var(--cds-font-weight-medium); background: none; cursor: pointer; line-height: inherit; }
+.nw-region:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+.nw-region:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.nw-card.compact .nw-region { background: color-mix(in srgb, currentColor 12%, transparent); }
+.nw-numcol { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
+.nw-star { position: relative; font-size: 0.6rem; line-height: 1; color: var(--color-warn); cursor: help; margin-bottom: 2px; }
+.nw-star::after { content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translateX(-50%); white-space: nowrap; font-size: var(--nw-fs-caption); color: var(--color-fg); background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); opacity: 0; pointer-events: none; z-index: 2; }
+.nw-star:hover::after, .nw-star:focus-visible::after, .nw-star.show::after { opacity: 1; }
+.nw-h, .nw-h-link { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; word-break: normal; -webkit-line-clamp: unset; display: block; }
+.nw-h-link { display: inline; }
+.nw-sum { margin: var(--cds-gap-sm) 0 0; font-size: var(--nw-fs-body); line-height: 1.7; white-space: normal; overflow: visible; }
+.nw-card { height: auto; overflow: visible; }
+.nw-card > .nw-why { margin-bottom: 0; }
+.nw-item + .nw-item { margin-top: var(--cds-gap-xs); padding-top: var(--cds-gap-xs); border-top: 1px dashed var(--color-border-line); }
+.nw-kind { display: inline-block; font-family: var(--font-anthropic-sans); font-size: var(--nw-fs-body); font-weight: var(--cds-font-weight-medium); color: var(--color-fg); border: 1px solid var(--color-border-line); border-radius: 3px; padding: 0 4px; margin-right: var(--cds-gap-xs); line-height: 1.35; vertical-align: baseline; }
+.nw-kind { min-width: 1.4em; text-align: center; letter-spacing: 0; text-transform: none; }
+.nw-key { flex-basis: 100%; margin: 0; font-size: var(--nw-fs-caption); color: var(--color-fg-muted); }
+.nw-key .nw-kind { margin-right: 2px; }
+.nw-h .nw-star { margin-right: 3px; vertical-align: 2px; }
+.nw-by { margin: var(--cds-gap-xs) 0 0; }
+.nw-item .nw-h { font-size: var(--nw-fs-body); line-height: 1.45; }
+.nw-region-home { font: inherit; font-size: var(--nw-fs-caption); font-weight: var(--cds-font-weight-medium); background: none; cursor: pointer; line-height: inherit; }
+.nw-region-home:active, .nw-region-home.tapped { box-shadow: 0 0 0 2px var(--color-panel), 0 0 0 3px currentColor; }
+.nw-h-op { margin-top: var(--cds-gap-xs); }
+.nw-psec + .nw-psec { margin-top: var(--cds-gap-md); padding-top: var(--cds-gap-sm); border-top: 1px dashed var(--color-border-line); }
+.nw-ptitle { margin: 0 0 var(--cds-gap-xs); font-size: var(--nw-fs-caption); font-weight: var(--cds-font-weight-medium); color: var(--color-fg); }
+.nw-psec .nw-sum { margin-top: 0; }
+.nw-h-link { color: var(--color-fg); text-decoration: none; }
+.nw-h-link:hover { text-decoration: underline; }
+.nw-read { font-size: var(--nw-fs-caption); font-weight: 400; white-space: nowrap; text-decoration: underline; }
+.nw-h-link.nw-read { color: #1d4ed8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .nw-h-link.nw-read { color: #7aa7ff; } }
+:root[data-theme="dark"] .nw-h-link.nw-read { color: #7aa7ff; }
+.nw-fail { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-sm); min-height: 20rem; color: var(--color-fg-muted); font-size: var(--nw-fs-caption); }
+.nw-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+.nw-foot { margin-top: var(--cds-pad-md); font-size: var(--nw-fs-caption); color: var(--color-fg-muted); line-height: 1.6; }
+.nw-foot summary { cursor: pointer; color: var(--color-fg); }
+.nw-foot ul { padding-left: 1.2em; }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+
+</style>
+</head>
+<body>
+<div id="dash-root">
+
+
+<div class="nw">
+  <header class="nw-head">
+    <h1 class="nw-title" id="top">World Economy News: Top 5</h1>
+    <p class="nw-sub"><b data-draw="edition" data-source="news" data-field="edition">—</b></p>
+    <p class="nw-key"><span class="nw-kind">N</span> News &nbsp;·&nbsp; <span class="nw-kind nw-kind-c">C</span> Commentary, column, editorial or analysis (opinion)</p>
+  </header>
+
+  <ol class="nw-list dash-skeleton" data-draw="cards" data-source="news" aria-label="Today's stories"></ol>
+
+  <details class="nw-foot">
+    <summary>How stories are chosen and how to read them</summary>
+    <ul>
+      <li>Each region has two pieces: one news story, with government and central-bank policy announcements first, and one editorial, column or commentary on it. If no policy announcement is available, the most important economic story is used.</li>
+      <li>Regions are assigned by what the story is about, not where the outlet is based.</li>
+      <li>Preferred sources: WSJ, NYT, Financial Times, The Economist, Nihon Keizai Shimbun, Nikkei Asia, The Globe and Mail, Financial Post.</li>
+      <li>For paywalled stories, we use reliable wire services or business papers that explicitly cite the original, or authorized republications, and list the original source and the provider separately.</li>
+      <li>Same-day stories (Korea time) come first; major stories from the past seven days are also allowed.</li>
+      <li>Headlines are shown in English; a headline translated from another language is marked “Translated”.</li>
+      <li>“Fact” is what the news article reports; “Outlook” is a forecast or analysis in it. Editorials, columns and commentary are opinion and are labelled as such.</li>
+      <li>★ marks a paywalled link; links to free republications carry no star.</li>
+      <li>Excluded: simple stock-price moves, stock picks, promotional pieces, and repeat coverage of the same event.</li>
+    </ul>
+  </details>
+</div>
+
+
+</div>
+<script>
+// Minimal stand-in for the dashboard runtime: loads data.json and runs the page's draw functions.
+(function(){
+  var state = { status: 'loading', data: [] };
+  var draws = {};
+  window.dash = {
+    colors: ['#3266ad','#b8650f','#2f8a4d','#c0392b','#7b4fb0','#0e8a8a','#8a6d0e','#a33f78'],
+    data: function(){ return state; },
+    draw: function(name, fn){ draws[name] = fn; run(name); }
+  };
+  function run(name){
+    document.querySelectorAll('[data-draw="'+name+'"]').forEach(function(el){
+      try { draws[name](el); } catch(e) { console.error(e); }
+    });
+  }
+  function runAll(){ Object.keys(draws).forEach(run); }
+  fetch('data/latest.json', { cache: 'no-store' })
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(j){ state = { status: 'ok', data: j.rows || [] }; runAll(); })
+    .catch(function(){ state = { status: 'error', data: [] }; runAll(); });
+})();
+</script>
+<script>
+
+const OPEN = (window.__nwOpen = window.__nwOpen || new Set());
+const ACCENT = { us: 0, eu: 1, asia: 2, ca: 3, kr: 5 };
+const fmtDate = (s) => {
+  const d = new Date(s + 'T00:00:00+09:00');
+  if (isNaN(d)) return s || '';
+  return new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Seoul', year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' }).format(d);
+};
+const latest = (rows) => rows.reduce((m, r) => (r.edition > m ? r.edition : m), '');
+const todayRows = (rows) => { const e = latest(rows); return rows.filter((r) => r.edition === e).sort((a, b) => Number(a.order) - Number(b.order)); };
+
+dash.draw('edition', (el) => {
+  const g = dash.data('news');
+  el.textContent = g.status === 'ok' && g.data.length ? fmtDate(latest(g.data)) : '—';
+});
+
+dash.draw('cards', (el) => {
+  const g = dash.data('news');
+  el.replaceChildren();
+  if (g.status === 'error' || g.status === 'declined') {
+    el.classList.remove('dash-skeleton');
+    const li = document.createElement('li'); li.className = 'nw-fail'; li.textContent = 'Failed to load'; el.append(li); return;
+  }
+  if (g.status !== 'ok') { el.classList.add('dash-skeleton'); return; }
+  el.classList.remove('dash-skeleton');
+  const mk = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+  const link = (cls, text, url) => { const a = mk('a', cls, text); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; return a; };
+  const starEl = () => {
+    const star = mk('span', 'nw-star', '★');
+    star.tabIndex = 0; star.setAttribute('role', 'img'); star.setAttribute('aria-label', 'Paid article'); star.dataset.tip = 'Paid article';
+    star.onclick = (e) => { e.stopPropagation(); star.classList.toggle('show'); };
+    star.onblur = () => star.classList.remove('show');
+    return star;
+  };
+  const headline = (kind, item) => {
+    const h = mk('h2', 'nw-h');
+    if (item.paid === true || item.paid === 'true') h.append(starEl());
+    const badge = mk('span', 'nw-kind', kind === 'News' ? 'N' : 'C'); badge.title = kind; badge.setAttribute('aria-label', kind); h.append(badge);
+    if (item.url) h.append(link('nw-h-link', item.title, item.url), document.createTextNode(' '), link('nw-h-link nw-read', '(read this article)', item.url));
+    else h.append(document.createTextNode(item.title));
+    if (item.title_translated === true || item.title_translated === 'true') h.append(mk('span', 'nw-tr', 'Translated'));
+    return h;
+  };
+  const whyEl = (ko, en) => {
+    const w = mk('div', 'nw-why'); w.append(mk('span', 'nw-lab nw-lab-why', 'Why read · 읽을 이유'));
+    if (en) { const we = mk('p', 'nw-why-en', en); we.lang = 'en'; w.append(we); }
+    const wk = mk('p', 'nw-why-ko', ko || ''); wk.lang = 'ko'; w.append(wk);
+    return w;
+  };
+  for (const r of todayRows(g.data)) {
+    let op = r.opinion;
+    if (typeof op === 'string') { try { op = JSON.parse(op); } catch (e) { op = null; } }
+    const color = dash.colors[ACCENT[r.region_key] ?? 0];
+    const li = mk('li', 'nw-card'); li.style.setProperty('--nw-accent', color);
+    const top = mk('div', 'nw-top');
+    top.append(mk('span', 'nw-num', String(r.order).padStart(2, '0')));
+    const tag = mk('button', 'nw-tag nw-region-home', r.region); tag.type = 'button'; tag.style.color = color; tag.title = 'Back to headlines';
+    top.append(tag);
+    li.append(top);
+
+    li.append(headline('News', r));
+    let opHead = null;
+    if (op && op.title) { opHead = headline(op.kind || 'Opinion', op); opHead.classList.add('nw-h-op'); li.append(opHead); }
+
+    const key = r.edition + '-' + r.order;
+    const pid = 'nw-panel-' + r.order;
+    const panel = mk('div', 'nw-panel'); panel.id = pid;
+    const isOpen = OPEN.has(key);
+    panel.hidden = !isOpen;
+    const btn = mk('button', 'nw-tag nw-toggle', isOpen ? 'Fact & Outlook ▴' : 'Fact & Outlook ▾');
+    btn.type = 'button'; btn.setAttribute('aria-expanded', String(isOpen)); btn.setAttribute('aria-controls', pid);
+    btn.onclick = () => {
+      const open = panel.hidden;
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = open ? 'Fact & Outlook ▴' : 'Fact & Outlook ▾';
+      open ? OPEN.add(key) : OPEN.delete(key);
+    };
+    top.append(btn);
+    tag.onclick = () => {
+      tag.classList.add('tapped'); clearTimeout(tag._t); tag._t = setTimeout(() => tag.classList.remove('tapped'), 700);
+      if (!panel.hidden) btn.click();
+    };
+
+    // News
+    const ns = mk('div', 'nw-psec');
+    ns.append(mk('p', 'nw-ptitle', 'N · News'));
+    const meta = [r.original_source && ('Source: ' + r.original_source), r.provider && ('Via: ' + r.provider), r.pub_date && fmtDate(r.pub_date)].filter(Boolean).join(' · ');
+    ns.append(mk('p', 'nw-meta', meta));
+    if (r.summary) { const sm = mk('p', 'nw-sum', r.summary); sm.lang = 'en'; ns.append(sm); }
+    ns.append(whyEl(r.why, r.why_en));
+    const f = mk('p', 'nw-sec'); f.append(mk('span', 'nw-lab', 'Fact'), document.createTextNode(r.fact || '')); ns.append(f);
+    if (r.outlook) { const o = mk('p', 'nw-sec'); o.append(mk('span', 'nw-lab', 'Outlook'), document.createTextNode(r.outlook)); ns.append(o); }
+    if (r.term) { const t = mk('p', 'nw-term'); t.append(mk('b', null, r.term), document.createTextNode(' — ' + (r.term_def || ''))); ns.append(t); }
+    if (r.note) ns.append(mk('p', 'nw-note', 'Verification note · ' + r.note));
+    panel.append(ns);
+
+    // Commentary
+    if (op && op.title) {
+      const cs = mk('div', 'nw-psec');
+      cs.append(mk('p', 'nw-ptitle', 'C · ' + (op.kind || 'Opinion')));
+      const by = [op.author, op.outlet, op.pub_date && fmtDate(op.pub_date)].filter(Boolean).join(' · ');
+      cs.append(mk('p', 'nw-meta', by));
+      if (op.summary) { const sm = mk('p', 'nw-sum', op.summary); sm.lang = 'en'; cs.append(sm); }
+      cs.append(whyEl(op.why, op.why_en));
+      panel.append(cs);
+    }
+    li.append(panel);
+    el.append(li);
+  }
+});
+
+</script>
+</body>
+</html>
