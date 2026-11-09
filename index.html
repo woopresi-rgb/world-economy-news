@@ -136,6 +136,13 @@ body{padding:16px;}
 .nw-readbtn:hover { color: var(--color-fg); border-color: var(--color-fg-muted); }
 .nw-readbtn.done { color: var(--color-ok); border-color: var(--color-ok); cursor: default; }
 
+
+.nw-rate { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; margin-top: var(--cds-gap-sm); }
+.nw-rate-q { font-size: var(--nw-fs-caption); color: var(--color-fg-muted); margin-right: 6px; }
+.nw-star-btn { font: inherit; font-size: 1.25rem; line-height: 1; padding: 2px 3px; background: none; border: 0; color: var(--color-border-line); cursor: pointer; }
+.nw-star-btn.on { color: #e3a008; }
+.nw-star-btn:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 1px; border-radius: 4px; }
+.nw-rate-ok { margin-left: 6px; font-size: var(--nw-fs-caption); color: var(--color-ok); }
 </style>
 </head>
 <body>
@@ -318,6 +325,30 @@ dash.draw('cards', (el) => {
     if (item.title_translated === true || item.title_translated === 'true') h.append(mk('span', 'nw-tr', 'Translated'));
     return h;
   };
+  const rateEl = (r, kindCode) => {
+    const rk = 'nw-rate-' + r.edition + '-' + r.region_key + '-' + kindCode;
+    let cur = 0; try { cur = Number(localStorage.getItem(rk)) || 0; } catch (e) {}
+    const box = mk('div', 'nw-rate');
+    box.append(mk('span', 'nw-rate-q', 'Useful? · 유용했나요?'));
+    const stars = [];
+    const paint = (n) => stars.forEach((b, i) => { b.textContent = i < n ? '★' : '☆'; b.classList.toggle('on', i < n); b.setAttribute('aria-pressed', String(i < n && i === n - 1)); });
+    for (let i = 1; i <= 5; i++) {
+      const b = mk('button', 'nw-star-btn', '☆'); b.type = 'button'; b.setAttribute('aria-label', i + ' star' + (i > 1 ? 's' : ''));
+      b.onmouseenter = () => paint(i); b.onfocus = () => paint(i);
+      b.onclick = () => {
+        if (cur === i) return;
+        cur = i; paint(i); thanks.textContent = 'Saved · 저장됨';
+        try { localStorage.setItem(rk, String(i)); } catch (e) {}
+        window.nwTrack('rate/' + r.edition + '/' + r.region_key + '/' + kindCode + '/' + i, 'Rated ' + i + ' ' + r.edition + ' ' + r.region + ' ' + kindCode, true);
+      };
+      stars.push(b); box.append(b);
+    }
+    box.onmouseleave = () => paint(cur);
+    const thanks = mk('span', 'nw-rate-ok', cur ? 'Saved · 저장됨' : '');
+    box.append(thanks);
+    paint(cur);
+    return box;
+  };
   const whyEl = (ko, en) => {
     const w = mk('div', 'nw-why'); w.append(mk('span', 'nw-lab nw-lab-why', 'Why read · 읽을 이유'));
     if (en) { const we = mk('p', 'nw-why-en', en); we.lang = 'en'; w.append(we); }
@@ -386,6 +417,7 @@ dash.draw('cards', (el) => {
     ns.append(whyEl(r.why, r.why_en));
     if (r.term) { const t = mk('p', 'nw-term'); t.append(mk('b', null, r.term), document.createTextNode(' — ' + (r.term_def || ''))); ns.append(t); }
     if (r.note) ns.append(mk('p', 'nw-note', 'Verification note · ' + r.note));
+    ns.append(rateEl(r, 'N'));
     panel.append(ns);
 
     // Commentary
@@ -396,6 +428,7 @@ dash.draw('cards', (el) => {
       cs.append(mk('p', 'nw-meta', by));
       if (op.summary) { const sm = mk('p', 'nw-sum', op.summary); sm.lang = 'en'; cs.append(sm); }
       cs.append(whyEl(op.why, op.why_en));
+      cs.append(rateEl(r, 'C'));
       panel.append(cs);
     }
     li.append(panel);
